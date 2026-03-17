@@ -475,8 +475,32 @@
 
   function onCatChange() { /* paths are built on addEntry */ }
 
+  // ── Image compression ─────────────────────────────────────
+  function compressImage(file, maxPx, quality) {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxPx || h > maxPx) {
+            if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+            else       { w = Math.round(w * maxPx / h); h = maxPx; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl.split(',')[1]); // return base64 only
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   // ── Add entry ────────────────────────────────────────────
-  function addEntry() {
+  async function addEntry() {
     const cat    = document.getElementById('catSelect').value;
     const client = document.getElementById('clientInput').value.trim();
     const title  = document.getElementById('titleInput').value.trim();
@@ -486,28 +510,32 @@
     if (!files.length) { toast('⚠️ Seleccioná al menos una foto'); return; }
     if (!client)       { toast('⚠️ Ingresa el nombre del cliente'); return; }
 
+    const btn = document.getElementById('addBtn');
+    btn.disabled = true;
+    btn.textContent = 'Comprimiendo...';
+
+    const MAX_PX = 2000, QUALITY = 0.85;
     let added = 0;
-    files.forEach(file => {
-      const slug = file.name.toLowerCase().replace(/\s+/g, '-');
+
+    for (const file of files) {
+      const slug = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-');
       const src  = `photos/${cat}/${slug}`;
       const id   = nextId++;
       entries.push({ id, src, category: cat, categoryLabel: CATS[cat], client, title });
 
-      const reader = new FileReader();
-      reader.onload = e => {
-        pendingFiles[id] = { b64: e.target.result.split(',')[1], path: src };
-      };
-      reader.readAsDataURL(file);
+      const b64 = await compressImage(file, MAX_PX, QUALITY);
+      pendingFiles[id] = { b64, path: src };
       added++;
-    });
+    }
 
     saveEntries();
     document.getElementById('titleInput').value = '';
     fileInput.value = '';
     document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
-    document.getElementById('addBtn').textContent = 'Agregar fotos';
+    btn.disabled = false;
+    btn.textContent = 'Agregar fotos';
     renderGrid(); updateStats(); updateClientsList();
-    toast(`✓ ${added} foto${added > 1 ? 's agregadas' : ' agregada'}`);
+    toast(`✓ ${added} foto${added > 1 ? 's agregadas' : ' agregada'} (comprimidas)`);
   }
 
   function deleteEntry(id) {
