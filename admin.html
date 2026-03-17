@@ -105,18 +105,22 @@
     }
     .hint { font-size: 11px; color: var(--gray2); margin-top: 5px; line-height: 1.5; }
 
-    /* Thumb preview */
-    .thumb-preview {
-      width: 100%; min-height: 80px;
-      border: 2px dashed var(--gray3); border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; color: var(--gray2); margin-bottom: 14px;
-      overflow: hidden; background: var(--bg);
+    /* Drop zone */
+    .drop-zone {
+      width: 100%; min-height: 120px;
+      border: 2px dashed var(--gray3); border-radius: 8px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; font-size: 12px; color: var(--gray2); margin-bottom: 14px;
+      background: var(--bg); cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      padding: 12px;
     }
-    .thumb-preview img { width: 100%; height: 100%; object-fit: cover; }
-    .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; padding: 4px; }
+    .drop-zone:hover { border-color: var(--blue); background: rgba(41,171,226,0.04); }
+    .drop-zone.drag-over { border-color: var(--blue); background: rgba(41,171,226,0.08); color: var(--blue); }
+    .drop-zone svg { opacity: 0.4; }
+    .drop-zone.has-files { padding: 4px; }
+    .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
     .thumb-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; }
-    .thumb-count { font-size: 12px; color: var(--gray2); padding: 8px; }
+    .thumb-count { font-size: 11px; color: var(--gray2); padding: 4px 0 0; }
 
     .add-btn { width: 100%; margin-top: 4px; padding: 11px; font-size: 13px; }
 
@@ -276,13 +280,13 @@
 
       <!-- Add photo form -->
       <p class="section-label">Agregar fotos</p>
-      <div class="thumb-preview" id="thumbPreview"><span>Vista previa</span></div>
 
-      <div class="form-group">
-        <label>Archivos de fotos</label>
-        <input type="file" id="fileInput" accept="image/*" multiple onchange="onFileSelect(this)">
-        <p class="hint">Podés seleccionar varias fotos a la vez.</p>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span id="dropLabel">Arrastrá fotos aquí o hacé clic para seleccionar</span>
       </div>
+      <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="onFileSelect(this)">
+
       <div class="form-group">
         <label>Categoría</label>
         <select id="catSelect" onchange="onCatChange()">
@@ -434,43 +438,69 @@
     } catch(e) { setGhStatus('err', 'Error de red'); }
   }
 
+  // ── Drop zone setup ───────────────────────────────────────
+  function initDropZone() {
+    const zone = document.getElementById('dropZone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+      // Assign to the hidden file input (via DataTransfer)
+      const dt = new DataTransfer();
+      files.forEach(f => dt.items.add(f));
+      document.getElementById('fileInput').files = dt.files;
+      showFilePreviews(files);
+    });
+  }
+
   // ── File select ──────────────────────────────────────────
   function onFileSelect(input) {
-    const files = Array.from(input.files);
+    showFilePreviews(Array.from(input.files));
+  }
+
+  function showFilePreviews(files) {
     if (!files.length) return;
-    const preview = document.getElementById('thumbPreview');
-    const btn = document.getElementById('addBtn');
+    const zone = document.getElementById('dropZone');
+    const btn  = document.getElementById('addBtn');
+
+    zone.classList.add('has-files');
 
     if (files.length === 1) {
       const reader = new FileReader();
       reader.onload = e => {
-        preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+        zone.innerHTML = `<img src="${e.target.result}" style="width:100%;height:160px;object-fit:cover;border-radius:4px">`;
       };
       reader.readAsDataURL(files[0]);
     } else {
-      // Show grid of thumbnails (max 9)
       const shown = files.slice(0, 9);
-      const div = document.createElement('div');
-      div.className = 'thumb-grid';
-      let loaded = 0;
+      const grid  = document.createElement('div');
+      grid.className = 'thumb-grid';
       shown.forEach(f => {
-        const r = new FileReader();
-        const img = document.createElement('img');
+        const r = new FileReader(), img = document.createElement('img');
         r.onload = e => { img.src = e.target.result; };
         r.readAsDataURL(f);
-        div.appendChild(img);
+        grid.appendChild(img);
       });
-      preview.innerHTML = '';
-      preview.appendChild(div);
+      zone.innerHTML = '';
+      zone.appendChild(grid);
       if (files.length > 9) {
         const more = document.createElement('p');
         more.className = 'thumb-count';
         more.textContent = `+${files.length - 9} más`;
-        preview.appendChild(more);
+        zone.appendChild(more);
       }
     }
 
     btn.textContent = files.length === 1 ? 'Agregar 1 foto' : `Agregar ${files.length} fotos`;
+  }
+
+  function resetDropZone() {
+    const zone = document.getElementById('dropZone');
+    zone.classList.remove('has-files');
+    zone.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span id="dropLabel">Arrastrá fotos aquí o hacé clic para seleccionar</span>`;
   }
 
   function onCatChange() { /* paths are built on addEntry */ }
@@ -531,7 +561,7 @@
     saveEntries();
     document.getElementById('titleInput').value = '';
     fileInput.value = '';
-    document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
+    resetDropZone();
     btn.disabled = false;
     btn.textContent = 'Agregar fotos';
     renderGrid(); updateStats(); updateClientsList();
@@ -708,7 +738,7 @@
     nextId  = entries.length ? Math.max(...entries.map(e=>e.id))+1 : 1;
     saveEntries();
   }
-  renderGrid(); updateStats(); updateClientsList();
+  renderGrid(); updateStats(); updateClientsList(); initDropZone();
   </script>
 
   <script src="js/data.js"></script>
