@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foto Shop Estudio — Portafolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header" id="top">
+    <a href="#top" class="logo">
+      <img src="assets/logo.png" alt="Foto Shop Estudio" onerror="this.src='assets/logo.svg'">
+    </a>
+    <nav class="nav">
+      <a href="#gallery" class="nav__link">Portafolio</a>
+      <a href="#clientes" class="nav__link">Clientes</a>
+      <a href="#contacto" class="nav__link">Contacto</a>
+    </nav>
+  </header>
+
+  <!-- ── TOOLBAR ── -->
+  <div class="toolbar">
+    <div class="cats" id="cats">
+      <button class="cat active" data-cat="all">Todos</button>
+      <button class="cat" data-cat="moda-hombre">Moda Hombre</button>
+      <button class="cat" data-cat="moda-mujer">Moda Mujer</button>
+      <button class="cat" data-cat="accesorios">Accesorios</button>
+      <button class="cat" data-cat="lenceria">Lencería</button>
+      <button class="cat" data-cat="colgados">Colgados</button>
+      <button class="cat" data-cat="flat-lay">Flat Lay</button>
+      <button class="cat" data-cat="360">360°</button>
+      <button class="cat" data-cat="infantil">Infantil</button>
+      <button class="cat" data-cat="campanias">Campañas</button>
+      <button class="cat" data-cat="calzado">Calzado</button>
+    </div>
+    <div class="client-wrap">
+      <select id="clientSelect" class="client-sel">
+        <option value="all">Todos los clientes</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ── COUNT BAR ── -->
+  <div class="count-bar">
+    <span id="photoCount">0 fotos</span>
+  </div>
+
+  <!-- ── GALLERY ── -->
+  <main class="gallery" id="gallery"></main>
+
+  <!-- ── CLIENTS SECTION ── -->
+  <section class="clients-section" id="clientes">
+    <div class="clients-section__inner">
+      <h2 class="section-title">Clientes</h2>
+      <div class="clients-grid" id="clientsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visor de foto">
+    <button class="lb__close" id="lbClose" aria-label="Cerrar">&#x2715;</button>
+    <button class="lb__nav lb__nav--prev" id="lbPrev" aria-label="Anterior">&#x2039;</button>
+    <button class="lb__nav lb__nav--next" id="lbNext" aria-label="Siguiente">&#x203A;</button>
+    <figure class="lb__figure">
+      <img class="lb__img" id="lbImg" src="" alt="">
+    </figure>
+    <div class="lb__caption">
+      <p class="lb__client" id="lbClient"></p>
+      <p class="lb__cat"    id="lbCat"></p>
+      <p class="lb__counter" id="lbCounter"></p>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer" id="contacto">
+    <img src="assets/logo.png" alt="Foto Shop Estudio" class="footer__logo"
+         onerror="this.src='assets/logo.svg'">
+    <p class="footer__copy">&copy; <span id="year"></span> Foto Shop Estudio. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
