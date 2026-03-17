@@ -375,7 +375,8 @@
   let entries   = [];   // { id, src, category, categoryLabel, client, title, _file?, _b64? }
   let nextId    = 1;
   let viewFilt  = 'all';
-  let pendingFiles = {}; // id → { b64, path } for new photos not yet on GitHub
+  let pendingFiles  = {}; // id → { b64, path } for new photos not yet on GitHub
+  let selectedFiles = []; // files ready to add (from picker or drag-drop)
 
   // ── Persist ──────────────────────────────────────────────
   function saveEntries() { localStorage.setItem('fse_entries', JSON.stringify(entries.map(e => ({...e, _file: undefined})))); }
@@ -448,17 +449,15 @@
       zone.classList.remove('drag-over');
       const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
       if (!files.length) return;
-      // Assign to the hidden file input (via DataTransfer)
-      const dt = new DataTransfer();
-      files.forEach(f => dt.items.add(f));
-      document.getElementById('fileInput').files = dt.files;
+      selectedFiles = files;
       showFilePreviews(files);
     });
   }
 
   // ── File select ──────────────────────────────────────────
   function onFileSelect(input) {
-    showFilePreviews(Array.from(input.files));
+    selectedFiles = Array.from(input.files);
+    showFilePreviews(selectedFiles);
   }
 
   function showFilePreviews(files) {
@@ -534,8 +533,7 @@
     const cat    = document.getElementById('catSelect').value;
     const client = document.getElementById('clientInput').value.trim();
     const title  = document.getElementById('titleInput').value.trim();
-    const fileInput = document.getElementById('fileInput');
-    const files  = Array.from(fileInput.files);
+    const files  = selectedFiles;
 
     if (!files.length) { toast('⚠️ Seleccioná al menos una foto'); return; }
     if (!client)       { toast('⚠️ Ingresa el nombre del cliente'); return; }
@@ -560,7 +558,8 @@
 
     saveEntries();
     document.getElementById('titleInput').value = '';
-    fileInput.value = '';
+    document.getElementById('fileInput').value = '';
+    selectedFiles = [];
     resetDropZone();
     btn.disabled = false;
     btn.textContent = 'Agregar fotos';
