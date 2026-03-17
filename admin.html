@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Foto Shop Estudio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #29ABE2;
+      --black: #111;
+      --gray: #5C5C5C;
+      --gray2: #AAA;
+      --gray3: #E4E4E4;
+      --bg: #F7F7F7;
+      --white: #FFF;
+      --red: #E04040;
+      --green: #2EAF6F;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--black); -webkit-font-smoothing: antialiased; }
+    img { display: block; }
+
+    /* Header */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray3);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header img { height: 34px; }
+    .header-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      border-left: 1px solid var(--gray3);
+      padding-left: 16px;
+      margin-left: 4px;
+    }
+    .header-actions { margin-left: auto; display: flex; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-success { background: var(--green); color: white; }
+    .btn-success:hover { opacity: 0.88; }
+    .btn-danger  { background: var(--red); color: white; }
+    .btn-outline {
+      background: none;
+      border: 1px solid var(--gray3);
+      color: var(--gray);
+    }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* Sidebar form */
+    .sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--gray3);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray3);
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 7px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid var(--gray3);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23AAA'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(41,171,226,0.12);
+    }
+
+    /* File preview */
+    .file-hint {
+      font-size: 11px;
+      color: var(--gray2);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    .file-hint b { color: var(--gray); }
+
+    .thumb-preview {
+      width: 100%;
+      aspect-ratio: 3/2;
+      border: 2px dashed var(--gray3);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--gray2);
+      margin-bottom: 18px;
+      overflow: hidden;
+      background: var(--bg);
+      position: relative;
+    }
+    .thumb-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb-preview .thumb-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      font-size: 10px;
+      padding: 4px 8px;
+      display: none;
+    }
+
+    .add-btn {
+      width: 100%;
+      margin-top: 4px;
+      padding: 12px;
+      font-size: 13px;
+    }
+
+    /* Counter chips */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray3);
+    }
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--bg);
+      border: 1px solid var(--gray3);
+      color: var(--gray);
+      white-space: nowrap;
+    }
+    .chip b { color: var(--blue); }
+
+    /* Main content */
+    .main {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .main-header h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+    }
+    .main-header span {
+      font-size: 12px;
+      color: var(--gray2);
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--gray3);
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      white-space: nowrap;
+      position: relative;
+      transition: color 0.15s;
+    }
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transition: transform 0.15s;
+    }
+    .tab:hover { color: var(--black); }
+    .tab.active { color: var(--black); }
+    .tab.active::after { transform: scaleX(1); }
+
+    /* Photo grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    /* Photo entry card */
+    .entry-card {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--gray3);
+      aspect-ratio: 3/4;
+      border: 1px solid var(--gray3);
+    }
+    .entry-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .entry-card .entry-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+    }
+    .entry-card:hover .entry-overlay { opacity: 1; }
+    .entry-card .entry-client {
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.2;
+    }
+    .entry-card .entry-cat {
+      font-size: 10px;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+    .entry-card .entry-delete {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(224,64,64,0.9);
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .entry-card:hover .entry-delete { display: flex; }
+
+    /* No image placeholder */
+    .entry-no-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      gap: 6px;
+      padding: 12px;
+      text-align: center;
+    }
+    .entry-no-img svg { opacity: 0.3; }
+    .entry-no-img span { font-size: 10px; color: var(--gray2); line-height: 1.3; word-break: break-all; }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1/-1;
+      padding: 80px 20px;
+      text-align: center;
+      color: var(--gray2);
+    }
+    .empty-state p { font-size: 14px; margin-top: 8px; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--black);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Modal */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 10px;
+      padding: 32px;
+      max-width: 520px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal h3 { font-size: 16px; margin-bottom: 8px; }
+    .modal p  { font-size: 13px; color: var(--gray); margin-bottom: 20px; line-height: 1.6; }
+    .modal pre {
+      background: var(--bg);
+      border: 1px solid var(--gray3);
+      border-radius: 6px;
+      padding: 16px;
+      font-size: 11px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--gray3); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <img src="assets/logo.png" alt="Foto Shop" onerror="this.src='assets/logo.svg'">
+    <span class="header-title">Panel de Administración</span>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="previewSite()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Ver sitio
+      </button>
+      <button class="btn btn-success" onclick="exportData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar data.js
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Sidebar: Agregar foto -->
+    <aside class="sidebar">
+      <p class="sidebar-title">Agregar foto</p>
+
+      <!-- Thumb preview -->
+      <div class="thumb-preview" id="thumbPreview">
+        <span>Vista previa</span>
+      </div>
+
+      <div class="form-group">
+        <label>Archivo de foto</label>
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(this)">
+        <p class="file-hint">Selecciona la foto desde tu computadora. Se copiará a la carpeta <b>photos/[categoría]/</b> manualmente.</p>
+      </div>
+
+      <div class="form-group">
+        <label>Ruta de la foto <span style="color:var(--gray2);font-weight:400;text-transform:none;letter-spacing:0">(relativa)</span></label>
+        <input type="text" id="srcInput" placeholder="photos/moda-hombre/foto1.jpg">
+        <p class="file-hint">Ejemplo: <b>photos/calzado/zapatilla-nike.jpg</b></p>
+      </div>
+
+      <div class="form-group">
+        <label>Categoría</label>
+        <select id="catSelect" onchange="onCatChange()">
+          <option value="moda-hombre"  data-label="Moda Hombre">Moda Hombre</option>
+          <option value="moda-mujer"   data-label="Moda Mujer">Moda Mujer</option>
+          <option value="accesorios"   data-label="Accesorios">Accesorios</option>
+          <option value="lenceria"     data-label="Lencería">Lencería</option>
+          <option value="colgados"     data-label="Colgados">Colgados</option>
+          <option value="flat-lay"     data-label="Flat Lay">Flat Lay</option>
+          <option value="360"          data-label="360°">360°</option>
+          <option value="infantil"     data-label="Infantil">Infantil</option>
+          <option value="campanias"    data-label="Campañas">Campañas</option>
+          <option value="calzado"      data-label="Calzado">Calzado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Cliente</label>
+        <input type="text" id="clientInput" placeholder="Nombre del cliente" list="clientsList">
+        <datalist id="clientsList"></datalist>
+      </div>
+
+      <div class="form-group">
+        <label>Título <span style="color:var(--gray2);font-weight:400;text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <input type="text" id="titleInput" placeholder="Descripción breve">
+      </div>
+
+      <button class="btn btn-primary add-btn" onclick="addEntry()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agregar foto
+      </button>
+
+      <!-- Stats -->
+      <div class="stats" id="statsArea"></div>
+    </aside>
+
+    <!-- Main: lista de fotos -->
+    <main class="main">
+      <div class="main-header">
+        <h2>Fotos en el portafolio</h2>
+        <span id="totalCount">0 fotos</span>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" id="filterTabs">
+        <button class="tab active" data-filter="all" onclick="filterView('all', this)">Todas</button>
+        <button class="tab" data-filter="moda-hombre"  onclick="filterView('moda-hombre', this)">Moda Hombre</button>
+        <button class="tab" data-filter="moda-mujer"   onclick="filterView('moda-mujer', this)">Moda Mujer</button>
+        <button class="tab" data-filter="accesorios"   onclick="filterView('accesorios', this)">Accesorios</button>
+        <button class="tab" data-filter="lenceria"     onclick="filterView('lenceria', this)">Lencería</button>
+        <button class="tab" data-filter="colgados"     onclick="filterView('colgados', this)">Colgados</button>
+        <button class="tab" data-filter="flat-lay"     onclick="filterView('flat-lay', this)">Flat Lay</button>
+        <button class="tab" data-filter="360"          onclick="filterView('360', this)">360°</button>
+        <button class="tab" data-filter="infantil"     onclick="filterView('infantil', this)">Infantil</button>
+        <button class="tab" data-filter="campanias"    onclick="filterView('campanias', this)">Campañas</button>
+        <button class="tab" data-filter="calzado"      onclick="filterView('calzado', this)">Calzado</button>
+      </div>
+
+      <div class="photo-grid" id="photoGrid"></div>
+
+      <div style="display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--gray3)">
+        <button class="btn btn-outline" onclick="clearAll()" style="font-size:11px">
+          Borrar todos los placeholders de muestra
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Export modal -->
+  <div class="modal-bg" id="exportModal">
+    <div class="modal">
+      <h3>Descargar data.js</h3>
+      <p>Se descargará el archivo <b>data.js</b>. Reemplaza el archivo existente en la carpeta <b>js/</b> del portafolio.</p>
+      <pre id="exportPreview"></pre>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-success" onclick="downloadFile()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── State ────────────────────────────────────────────
+    let entries = [];
+    let nextId  = 1;
+    let viewFilter = 'all';
+
+    const CATS = {
+      'moda-hombre': 'Moda Hombre',
+      'moda-mujer':  'Moda Mujer',
+      'accesorios':  'Accesorios',
+      'lenceria':    'Lencería',
+      'colgados':    'Colgados',
+      'flat-lay':    'Flat Lay',
+      '360':         '360°',
+      'infantil':    'Infantil',
+      'campanias':   'Campañas',
+      'calzado':     'Calzado',
+    };
+
+    // ── Load from localStorage ────────────────────────────
+    function loadSaved() {
+      try {
+        const saved = localStorage.getItem('fotoshop_entries');
+        if (saved) {
+          entries = JSON.parse(saved);
+          nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
+        } else {
+          // Load defaults from PHOTOS if available
+          if (typeof PHOTOS !== 'undefined') {
+            entries = JSON.parse(JSON.stringify(PHOTOS));
+            nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
+          }
+        }
+      } catch(e) {}
+    }
+
+    function save() {
+      localStorage.setItem('fotoshop_entries', JSON.stringify(entries));
+    }
+
+    // ── File select ──────────────────────────────────────
+    function onFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Auto-fill src
+      const cat = document.getElementById('catSelect').value;
+      const slug = file.name.toLowerCase().replace(/\s+/g, '-');
+      document.getElementById('srcInput').value = `photos/${cat}/${slug}`;
+
+      // Preview
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.getElementById('thumbPreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function onCatChange() {
+      const src = document.getElementById('srcInput').value;
+      if (!src) return;
+      const cat  = document.getElementById('catSelect').value;
+      const file = src.split('/').pop();
+      document.getElementById('srcInput').value = `photos/${cat}/${file}`;
+    }
+
+    // ── Add entry ────────────────────────────────────────
+    function addEntry() {
+      const src    = document.getElementById('srcInput').value.trim();
+      const cat    = document.getElementById('catSelect').value;
+      const client = document.getElementById('clientInput').value.trim();
+      const title  = document.getElementById('titleInput').value.trim();
+
+      if (!src)    { showToast('⚠️ Ingresa la ruta de la foto'); return; }
+      if (!client) { showToast('⚠️ Ingresa el nombre del cliente'); return; }
+
+      const entry = {
+        id: nextId++,
+        src,
+        category: cat,
+        categoryLabel: CATS[cat],
+        client,
+        title,
+      };
+
+      entries.push(entry);
+      save();
+
+      // Clear form (keep category and client for quick bulk add)
+      document.getElementById('srcInput').value  = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('fileInput').value  = '';
+      document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
+
+      renderGrid();
+      updateStats();
+      updateClientsList();
+      showToast('✓ Foto agregada');
+    }
+
+    // ── Delete entry ─────────────────────────────────────
+    function deleteEntry(id) {
+      entries = entries.filter(e => e.id !== id);
+      save();
+      renderGrid();
+      updateStats();
+    }
+
+    // ── Clear sample data ─────────────────────────────────
+    function clearAll() {
+      if (!confirm('¿Borrar todos los placeholders de muestra? Esto no se puede deshacer.')) return;
+      entries = entries.filter(e => !e.src.startsWith('assets/ph/'));
+      save();
+      renderGrid();
+      updateStats();
+      showToast('Placeholders borrados');
+    }
+
+    // ── Filter ───────────────────────────────────────────
+    function filterView(cat, btn) {
+      viewFilter = cat;
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
+      renderGrid();
+    }
+
+    // ── Render grid ──────────────────────────────────────
+    function renderGrid() {
+      const grid = document.getElementById('photoGrid');
+      const filtered = viewFilter === 'all' ? entries : entries.filter(e => e.category === viewFilter);
+
+      document.getElementById('totalCount').textContent =
+        entries.length === 1 ? '1 foto' : `${entries.length} fotos`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#CCC" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9l4-4 4 4 4-4 4 4"/>
+          </svg>
+          <p>No hay fotos en esta categoría</p>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(e => `
+        <div class="entry-card">
+          ${e.src.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ?
+            `<img src="${e.src}" alt="${e.client}" onerror="this.parentElement.innerHTML='<div class=\\'entry-no-img\\'><svg width=\\'24\\' height=\\'24\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg><span>${e.src}</span></div>'">`
+            : `<div class="entry-no-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span>${e.src}</span></div>`
+          }
+          <div class="entry-overlay">
+            <span class="entry-client">${e.client}</span>
+            <span class="entry-cat">${e.categoryLabel}</span>
+          </div>
+          <button class="entry-delete" onclick="deleteEntry(${e.id})" title="Eliminar">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // ── Stats chips ──────────────────────────────────────
+    function updateStats() {
+      const counts = {};
+      entries.forEach(e => { counts[e.category] = (counts[e.category] || 0) + 1; });
+      const area = document.getElementById('statsArea');
+      area.innerHTML = `<p style="font-size:11px;color:var(--gray2);width:100%;margin-bottom:4px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">Resumen</p>` +
+        Object.entries(CATS).map(([slug, label]) =>
+          `<span class="chip">${label} <b>${counts[slug] || 0}</b></span>`
+        ).join('');
+    }
+
+    // ── Clients datalist ─────────────────────────────────
+    function updateClientsList() {
+      const clients = [...new Set(entries.map(e => e.client))].sort();
+      const dl = document.getElementById('clientsList');
+      dl.innerHTML = clients.map(c => `<option value="${c}">`).join('');
+    }
+
+    // ── Export ───────────────────────────────────────────
+    function generateDataJs() {
+      const lines = entries.map(e =>
+        `  { id: ${e.id}, src: '${e.src}', category: '${e.category}', categoryLabel: '${e.categoryLabel}', client: '${e.client}', title: '${e.title}' },`
+      ).join('\n');
+
+      return `/* =====================================================
+   FOTO SHOP ESTUDIO — data.js
+   Generado desde el panel de administración
+   =====================================================
+   CÓMO AGREGAR FOTOS
+   ─────────────────────────────────────────────────────
+   Usa el panel admin.html para agregar fotos visualmente.
+   ===================================================== */
+
+const PHOTOS = [
+${lines}
+];
+`;
+    }
+
+    function exportData() {
+      const content = generateDataJs();
+      document.getElementById('exportPreview').textContent = content.slice(0, 2000) + (content.length > 2000 ? '\n...' : '');
+      document.getElementById('exportModal').classList.add('open');
+    }
+
+    function downloadFile() {
+      const content = generateDataJs();
+      const blob = new Blob([content], { type: 'text/javascript' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url;
+      a.download = 'data.js';
+      a.click();
+      URL.revokeObjectURL(url);
+      closeModal();
+      showToast('✓ data.js descargado — reemplaza el archivo en js/');
+    }
+
+    function closeModal() {
+      document.getElementById('exportModal').classList.remove('open');
+    }
+
+    function previewSite() {
+      window.open('index.html', '_blank');
+    }
+
+    // ── Toast ────────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ── Auto-fill src on category change ─────────────────
+    document.getElementById('catSelect').addEventListener('change', onCatChange);
+
+    // ── Init ─────────────────────────────────────────────
+    loadSaved();
+    renderGrid();
+    updateStats();
+    updateClientsList();
+  </script>
+
+  <!-- Load existing data for import -->
+  <script src="js/data.js"></script>
+  <script>
+    // If localStorage is empty, import from PHOTOS
+    if (!localStorage.getItem('fotoshop_entries') && typeof PHOTOS !== 'undefined') {
+      entries = JSON.parse(JSON.stringify(PHOTOS));
+      nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
+      save();
+      renderGrid();
+      updateStats();
+      updateClientsList();
+    }
+  </script>
+</body>
+</html>
