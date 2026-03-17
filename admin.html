@@ -107,13 +107,16 @@
 
     /* Thumb preview */
     .thumb-preview {
-      width: 100%; aspect-ratio: 4/3;
+      width: 100%; min-height: 80px;
       border: 2px dashed var(--gray3); border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; color: var(--gray2); margin-bottom: 14px;
       overflow: hidden; background: var(--bg);
     }
     .thumb-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; padding: 4px; }
+    .thumb-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; }
+    .thumb-count { font-size: 12px; color: var(--gray2); padding: 8px; }
 
     .add-btn { width: 100%; margin-top: 4px; padding: 11px; font-size: 13px; }
 
@@ -272,17 +275,13 @@
       </div>
 
       <!-- Add photo form -->
-      <p class="section-label">Agregar foto</p>
+      <p class="section-label">Agregar fotos</p>
       <div class="thumb-preview" id="thumbPreview"><span>Vista previa</span></div>
 
       <div class="form-group">
-        <label>Archivo de foto</label>
-        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(this)">
-      </div>
-      <div class="form-group">
-        <label>Ruta en el sitio</label>
-        <input type="text" id="srcInput" placeholder="photos/moda-hombre/foto1.jpg">
-        <p class="hint">Se rellena automáticamente al seleccionar el archivo.</p>
+        <label>Archivos de fotos</label>
+        <input type="file" id="fileInput" accept="image/*" multiple onchange="onFileSelect(this)">
+        <p class="hint">Podés seleccionar varias fotos a la vez.</p>
       </div>
       <div class="form-group">
         <label>Categoría</label>
@@ -309,9 +308,9 @@
         <input type="text" id="titleInput" placeholder="Descripción breve">
       </div>
 
-      <button class="btn btn-primary add-btn" onclick="addEntry()">
+      <button class="btn btn-primary add-btn" id="addBtn" onclick="addEntry()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Agregar foto
+        Agregar fotos
       </button>
 
       <div class="stats" id="statsArea"></div>
@@ -437,58 +436,78 @@
 
   // ── File select ──────────────────────────────────────────
   function onFileSelect(input) {
-    const file = input.files[0]; if (!file) return;
-    const cat  = document.getElementById('catSelect').value;
-    const slug = file.name.toLowerCase().replace(/\s+/g,'-');
-    document.getElementById('srcInput').value = `photos/${cat}/${slug}`;
-    // preview
-    const reader = new FileReader();
-    reader.onload = e => {
-      document.getElementById('thumbPreview').innerHTML = `<img src="${e.target.result}">`;
-    };
-    reader.readAsDataURL(file);
+    const files = Array.from(input.files);
+    if (!files.length) return;
+    const preview = document.getElementById('thumbPreview');
+    const btn = document.getElementById('addBtn');
+
+    if (files.length === 1) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      // Show grid of thumbnails (max 9)
+      const shown = files.slice(0, 9);
+      const div = document.createElement('div');
+      div.className = 'thumb-grid';
+      let loaded = 0;
+      shown.forEach(f => {
+        const r = new FileReader();
+        const img = document.createElement('img');
+        r.onload = e => { img.src = e.target.result; };
+        r.readAsDataURL(f);
+        div.appendChild(img);
+      });
+      preview.innerHTML = '';
+      preview.appendChild(div);
+      if (files.length > 9) {
+        const more = document.createElement('p');
+        more.className = 'thumb-count';
+        more.textContent = `+${files.length - 9} más`;
+        preview.appendChild(more);
+      }
+    }
+
+    btn.textContent = files.length === 1 ? 'Agregar 1 foto' : `Agregar ${files.length} fotos`;
   }
 
-  function onCatChange() {
-    const src = document.getElementById('srcInput').value; if (!src) return;
-    const cat  = document.getElementById('catSelect').value;
-    const file = src.split('/').pop();
-    document.getElementById('srcInput').value = `photos/${cat}/${file}`;
-  }
+  function onCatChange() { /* paths are built on addEntry */ }
 
   // ── Add entry ────────────────────────────────────────────
   function addEntry() {
-    const src    = document.getElementById('srcInput').value.trim();
     const cat    = document.getElementById('catSelect').value;
     const client = document.getElementById('clientInput').value.trim();
     const title  = document.getElementById('titleInput').value.trim();
     const fileInput = document.getElementById('fileInput');
+    const files  = Array.from(fileInput.files);
 
-    if (!src)    { toast('⚠️ Ingresa la ruta de la foto'); return; }
-    if (!client) { toast('⚠️ Ingresa el nombre del cliente'); return; }
+    if (!files.length) { toast('⚠️ Seleccioná al menos una foto'); return; }
+    if (!client)       { toast('⚠️ Ingresa el nombre del cliente'); return; }
 
-    const id = nextId++;
-    const entry = { id, src, category: cat, categoryLabel: CATS[cat], client, title };
-    entries.push(entry);
+    let added = 0;
+    files.forEach(file => {
+      const slug = file.name.toLowerCase().replace(/\s+/g, '-');
+      const src  = `photos/${cat}/${slug}`;
+      const id   = nextId++;
+      entries.push({ id, src, category: cat, categoryLabel: CATS[cat], client, title });
 
-    // Store file data for GitHub upload if a file was selected
-    if (fileInput.files[0]) {
-      const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = e => {
-        const b64 = e.target.result.split(',')[1]; // strip data:image/...;base64,
-        pendingFiles[id] = { b64, path: src };
+        pendingFiles[id] = { b64: e.target.result.split(',')[1], path: src };
       };
       reader.readAsDataURL(file);
-    }
+      added++;
+    });
 
     saveEntries();
-    document.getElementById('srcInput').value  = '';
     document.getElementById('titleInput').value = '';
-    document.getElementById('fileInput').value  = '';
+    fileInput.value = '';
     document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
+    document.getElementById('addBtn').textContent = 'Agregar fotos';
     renderGrid(); updateStats(); updateClientsList();
-    toast('✓ Foto agregada');
+    toast(`✓ ${added} foto${added > 1 ? 's agregadas' : ' agregada'}`);
   }
 
   function deleteEntry(id) {
