@@ -8,15 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue: #29ABE2;
-      --black: #111;
-      --gray: #5C5C5C;
-      --gray2: #AAA;
-      --gray3: #E4E4E4;
-      --bg: #F7F7F7;
-      --white: #FFF;
-      --red: #E04040;
-      --green: #2EAF6F;
+      --blue: #29ABE2; --black: #111; --gray: #5C5C5C; --gray2: #AAA;
+      --gray3: #E4E4E4; --bg: #F7F7F7; --white: #FFF;
+      --red: #E04040; --green: #2EAF6F; --orange: #F5A623;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--black); -webkit-font-smoothing: antialiased; }
@@ -24,397 +18,206 @@
 
     /* Header */
     .header {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray3);
-      padding: 0 40px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--white); border-bottom: 1px solid var(--gray3);
+      padding: 0 32px; height: 60px; display: flex; align-items: center;
+      gap: 16px; position: sticky; top: 0; z-index: 100;
     }
-    .header img { height: 34px; }
+    .header img { height: 32px; }
     .header-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray2);
-      border-left: 1px solid var(--gray3);
-      padding-left: 16px;
-      margin-left: 4px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray2);
+      border-left: 1px solid var(--gray3); padding-left: 16px; margin-left: 4px;
     }
-    .header-actions { margin-left: auto; display: flex; gap: 10px; }
+    .header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 
     /* Buttons */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 9px 18px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 6px; font-family: inherit;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.03em;
+      border: none; cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
     }
     .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--blue); color: white; }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-success { background: var(--green); color: white; }
-    .btn-success:hover { opacity: 0.88; }
-    .btn-danger  { background: var(--red); color: white; }
-    .btn-outline {
-      background: none;
-      border: 1px solid var(--gray3);
-      color: var(--gray);
-    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary  { background: var(--blue); color: white; }
+    .btn-success  { background: var(--green); color: white; }
+    .btn-orange   { background: var(--orange); color: white; }
+    .btn-outline  { background: none; border: 1px solid var(--gray3); color: var(--gray); }
+    .btn-primary:hover:not(:disabled) { opacity: 0.88; }
+    .btn-success:hover:not(:disabled) { opacity: 0.88; }
+    .btn-orange:hover:not(:disabled)  { opacity: 0.88; }
     .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
 
     /* Layout */
     .layout {
       display: grid;
-      grid-template-columns: 400px 1fr;
-      gap: 0;
-      min-height: calc(100vh - 64px);
+      grid-template-columns: 380px 1fr;
+      min-height: calc(100vh - 60px);
     }
 
-    /* Sidebar form */
+    /* Sidebar */
     .sidebar {
-      background: var(--white);
-      border-right: 1px solid var(--gray3);
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+      background: var(--white); border-right: 1px solid var(--gray3);
+      padding: 28px; display: flex; flex-direction: column; gap: 0;
+      overflow-y: auto; max-height: calc(100vh - 60px);
+      position: sticky; top: 60px;
     }
-    .sidebar-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--black);
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--gray3);
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray2);
+      margin-bottom: 14px; margin-top: 24px;
+      padding-top: 20px; border-top: 1px solid var(--gray3);
     }
+    .section-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    /* GitHub config panel */
+    .gh-status {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: 8px; font-size: 12px;
+      font-weight: 500; margin-bottom: 12px;
+    }
+    .gh-status.ok  { background: #EBF9F1; color: #1A7A46; border: 1px solid #B4E8CB; }
+    .gh-status.err { background: #FEF0F0; color: #B02020; border: 1px solid #FACACA; }
+    .gh-status.idle{ background: var(--bg); color: var(--gray2); border: 1px solid var(--gray3); }
 
     /* Form */
-    .form-group { margin-bottom: 18px; }
+    .form-group { margin-bottom: 14px; }
     .form-group label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 7px;
+      display: block; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray); margin-bottom: 6px;
     }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1px solid var(--gray3);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 13px;
-      color: var(--black);
-      background: var(--white);
-      transition: border-color 0.15s;
-      appearance: none;
-      -webkit-appearance: none;
+    .form-group input, .form-group select {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--gray3); border-radius: 6px;
+      font-family: inherit; font-size: 13px; color: var(--black);
+      background: var(--white); transition: border-color 0.15s;
+      appearance: none; -webkit-appearance: none;
     }
     .form-group select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23AAA'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 32px;
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
     }
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--blue);
+    input[type="password"] { letter-spacing: 0.1em; }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(41,171,226,0.12);
     }
+    .hint { font-size: 11px; color: var(--gray2); margin-top: 5px; line-height: 1.5; }
 
-    /* File preview */
-    .file-hint {
-      font-size: 11px;
-      color: var(--gray2);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-    .file-hint b { color: var(--gray); }
-
+    /* Thumb preview */
     .thumb-preview {
-      width: 100%;
-      aspect-ratio: 3/2;
-      border: 2px dashed var(--gray3);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: var(--gray2);
-      margin-bottom: 18px;
-      overflow: hidden;
-      background: var(--bg);
-      position: relative;
+      width: 100%; aspect-ratio: 4/3;
+      border: 2px dashed var(--gray3); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: var(--gray2); margin-bottom: 14px;
+      overflow: hidden; background: var(--bg);
     }
-    .thumb-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .thumb-preview .thumb-label {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      font-size: 10px;
-      padding: 4px 8px;
-      display: none;
-    }
+    .thumb-preview img { width: 100%; height: 100%; object-fit: cover; }
 
-    .add-btn {
-      width: 100%;
-      margin-top: 4px;
-      padding: 12px;
-      font-size: 13px;
-    }
+    .add-btn { width: 100%; margin-top: 4px; padding: 11px; font-size: 13px; }
 
-    /* Counter chips */
-    .stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 28px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray3);
-    }
+    /* Stats */
+    .stats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray3); }
     .chip {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: var(--bg);
-      border: 1px solid var(--gray3);
-      color: var(--gray);
-      white-space: nowrap;
+      font-size: 10px; font-weight: 600; padding: 3px 9px;
+      border-radius: 20px; background: var(--bg); border: 1px solid var(--gray3); color: var(--gray);
     }
     .chip b { color: var(--blue); }
 
-    /* Main content */
-    .main {
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .main-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .main-header h2 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--gray);
-    }
-    .main-header span {
-      font-size: 12px;
-      color: var(--gray2);
-    }
+    /* Main */
+    .main { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+    .main-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .main-header h2 { font-size: 13px; font-weight: 600; color: var(--gray); }
 
     /* Filter tabs */
-    .filter-tabs {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid var(--gray3);
-      overflow-x: auto;
-    }
+    .filter-tabs { display: flex; border-bottom: 1px solid var(--gray3); overflow-x: auto; scrollbar-width: none; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
     .tab {
-      padding: 10px 16px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--gray2);
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-family: inherit;
-      white-space: nowrap;
-      position: relative;
-      transition: color 0.15s;
+      padding: 9px 14px; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray2);
+      cursor: pointer; border: none; background: none; font-family: inherit;
+      white-space: nowrap; position: relative; transition: color 0.15s;
     }
     .tab::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      height: 2px;
-      background: var(--blue);
-      transform: scaleX(0);
-      transition: transform 0.15s;
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 2px; background: var(--blue); transform: scaleX(0); transition: transform 0.15s;
     }
     .tab:hover { color: var(--black); }
     .tab.active { color: var(--black); }
     .tab.active::after { transform: scaleX(1); }
 
     /* Photo grid */
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 10px;
-    }
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 
-    /* Photo entry card */
-    .entry-card {
-      position: relative;
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--gray3);
-      aspect-ratio: 3/4;
-      border: 1px solid var(--gray3);
+    /* Entry card */
+    .card {
+      position: relative; border-radius: 6px; overflow: hidden;
+      background: var(--gray3); aspect-ratio: 3/4; cursor: default;
     }
-    .entry-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .card img { width: 100%; height: 100%; object-fit: cover; }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.2s;
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 10px;
     }
-    .entry-card .entry-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
-      opacity: 0;
-      transition: opacity 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 12px;
+    .card:hover .card-overlay { opacity: 1; }
+    .card-client { font-size: 11px; font-weight: 600; color: white; line-height: 1.2; }
+    .card-cat { font-size: 9px; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; font-weight: 600; }
+    .card-new { position: absolute; top: 6px; left: 6px; background: var(--orange); color: white; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
+    .card-del {
+      position: absolute; top: 6px; right: 6px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(224,64,64,0.9); border: none; color: white;
+      font-size: 13px; cursor: pointer; display: none;
+      align-items: center; justify-content: center;
     }
-    .entry-card:hover .entry-overlay { opacity: 1; }
-    .entry-card .entry-client {
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-      line-height: 1.2;
+    .card:hover .card-del { display: flex; }
+    .card-no-img {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; background: var(--bg);
+      gap: 4px; padding: 8px; text-align: center;
     }
-    .entry-card .entry-cat {
-      font-size: 10px;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 3px;
-      font-weight: 600;
-    }
-    .entry-card .entry-delete {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(224,64,64,0.9);
-      border: none;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-    .entry-card:hover .entry-delete { display: flex; }
+    .card-no-img svg { opacity: 0.3; }
+    .card-no-img span { font-size: 9px; color: var(--gray2); word-break: break-all; }
 
-    /* No image placeholder */
-    .entry-no-img {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      gap: 6px;
-      padding: 12px;
-      text-align: center;
-    }
-    .entry-no-img svg { opacity: 0.3; }
-    .entry-no-img span { font-size: 10px; color: var(--gray2); line-height: 1.3; word-break: break-all; }
+    /* Empty */
+    .empty { grid-column: 1/-1; padding: 80px 20px; text-align: center; color: var(--gray2); }
+    .empty p { font-size: 14px; margin-top: 8px; }
 
-    /* Empty state */
-    .empty-state {
-      grid-column: 1/-1;
-      padding: 80px 20px;
-      text-align: center;
-      color: var(--gray2);
-    }
-    .empty-state p { font-size: 14px; margin-top: 8px; }
+    /* Progress bar */
+    .progress-wrap { display: none; flex-direction: column; gap: 8px; padding: 16px; background: var(--bg); border-radius: 8px; border: 1px solid var(--gray3); }
+    .progress-wrap.show { display: flex; }
+    .progress-bar-bg { height: 6px; background: var(--gray3); border-radius: 3px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--blue); border-radius: 3px; transition: width 0.3s; width: 0%; }
+    .progress-label { font-size: 12px; color: var(--gray); }
 
     /* Toast */
     .toast {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      background: var(--black);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      z-index: 9999;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.2s, transform 0.2s;
-      pointer-events: none;
+      position: fixed; bottom: 28px; right: 28px;
+      background: var(--black); color: white;
+      padding: 11px 18px; border-radius: 8px; font-size: 13px; font-weight: 500;
+      z-index: 9999; opacity: 0; transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s; pointer-events: none;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error   { background: var(--red); }
 
     /* Modal */
-    .modal-bg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 500;
-      align-items: center;
-      justify-content: center;
-    }
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
-    .modal {
-      background: white;
-      border-radius: 10px;
-      padding: 32px;
-      max-width: 520px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .modal h3 { font-size: 16px; margin-bottom: 8px; }
-    .modal p  { font-size: 13px; color: var(--gray); margin-bottom: 20px; line-height: 1.6; }
-    .modal pre {
-      background: var(--bg);
-      border: 1px solid var(--gray3);
-      border-radius: 6px;
-      padding: 16px;
-      font-size: 11px;
-      line-height: 1.7;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .modal { background: white; border-radius: 10px; padding: 28px; max-width: 480px; width: 90%; }
+    .modal h3 { font-size: 15px; margin-bottom: 8px; }
+    .modal p  { font-size: 13px; color: var(--gray); margin-bottom: 16px; line-height: 1.6; }
+    .modal pre { background: var(--bg); border: 1px solid var(--gray3); border-radius: 6px; padding: 14px; font-size: 10px; line-height: 1.7; overflow: auto; max-height: 260px; white-space: pre-wrap; word-break: break-all; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
 
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
-      .sidebar { border-right: none; border-bottom: 1px solid var(--gray3); }
+      .sidebar { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--gray3); }
+      .header { padding: 0 16px; }
     }
   </style>
 </head>
@@ -425,40 +228,62 @@
     <img src="assets/logo.png" alt="Foto Shop" onerror="this.src='assets/logo.svg'">
     <span class="header-title">Panel de Administración</span>
     <div class="header-actions">
-      <button class="btn btn-outline" onclick="previewSite()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      <button class="btn btn-outline" onclick="window.open('index.html','_blank')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Ver sitio
       </button>
-      <button class="btn btn-success" onclick="exportData()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <button class="btn btn-outline" onclick="exportModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Descargar data.js
+      </button>
+      <button class="btn btn-orange" id="publishBtn" onclick="publishToGitHub()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Publicar en GitHub
       </button>
     </div>
   </header>
 
   <div class="layout">
 
-    <!-- Sidebar: Agregar foto -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-      <p class="sidebar-title">Agregar foto</p>
 
-      <!-- Thumb preview -->
-      <div class="thumb-preview" id="thumbPreview">
-        <span>Vista previa</span>
+      <!-- GitHub config -->
+      <p class="section-label" style="margin-top:0;padding-top:0;border-top:none">Configuración GitHub</p>
+      <div id="ghStatus" class="gh-status idle">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Token no configurado
       </div>
+      <div class="form-group">
+        <label>Token de GitHub</label>
+        <input type="password" id="ghToken" placeholder="ghp_..." oninput="saveToken()">
+        <p class="hint">Clásico con permiso <b>repo</b>. Se guarda solo en tu navegador.</p>
+      </div>
+      <div class="form-group">
+        <label>Repositorio</label>
+        <input type="text" id="ghRepo" value="maxblanchardf/fotoshop-portfolio" oninput="saveToken()">
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:4px" onclick="testToken()">Verificar conexión</button>
+
+      <!-- Progress bar -->
+      <div class="progress-wrap" id="progressWrap">
+        <p class="progress-label" id="progressLabel">Subiendo...</p>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+      </div>
+
+      <!-- Add photo form -->
+      <p class="section-label">Agregar foto</p>
+      <div class="thumb-preview" id="thumbPreview"><span>Vista previa</span></div>
 
       <div class="form-group">
         <label>Archivo de foto</label>
         <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(this)">
-        <p class="file-hint">Selecciona la foto desde tu computadora. Se copiará a la carpeta <b>photos/[categoría]/</b> manualmente.</p>
       </div>
-
       <div class="form-group">
-        <label>Ruta de la foto <span style="color:var(--gray2);font-weight:400;text-transform:none;letter-spacing:0">(relativa)</span></label>
+        <label>Ruta en el sitio</label>
         <input type="text" id="srcInput" placeholder="photos/moda-hombre/foto1.jpg">
-        <p class="file-hint">Ejemplo: <b>photos/calzado/zapatilla-nike.jpg</b></p>
+        <p class="hint">Se rellena automáticamente al seleccionar el archivo.</p>
       </div>
-
       <div class="form-group">
         <label>Categoría</label>
         <select id="catSelect" onchange="onCatChange()">
@@ -474,56 +299,48 @@
           <option value="calzado"      data-label="Calzado">Calzado</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Cliente</label>
         <input type="text" id="clientInput" placeholder="Nombre del cliente" list="clientsList">
         <datalist id="clientsList"></datalist>
       </div>
-
       <div class="form-group">
-        <label>Título <span style="color:var(--gray2);font-weight:400;text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <label>Título <span style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</span></label>
         <input type="text" id="titleInput" placeholder="Descripción breve">
       </div>
 
       <button class="btn btn-primary add-btn" onclick="addEntry()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Agregar foto
       </button>
 
-      <!-- Stats -->
       <div class="stats" id="statsArea"></div>
     </aside>
 
-    <!-- Main: lista de fotos -->
+    <!-- Main -->
     <main class="main">
       <div class="main-header">
-        <h2>Fotos en el portafolio</h2>
-        <span id="totalCount">0 fotos</span>
+        <h2>Fotos en el portafolio — <span id="totalCount">0 fotos</span></h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline" style="font-size:11px" onclick="clearSamples()">Borrar placeholders</button>
+        </div>
       </div>
 
-      <!-- Filter tabs -->
       <div class="filter-tabs" id="filterTabs">
-        <button class="tab active" data-filter="all" onclick="filterView('all', this)">Todas</button>
-        <button class="tab" data-filter="moda-hombre"  onclick="filterView('moda-hombre', this)">Moda Hombre</button>
-        <button class="tab" data-filter="moda-mujer"   onclick="filterView('moda-mujer', this)">Moda Mujer</button>
-        <button class="tab" data-filter="accesorios"   onclick="filterView('accesorios', this)">Accesorios</button>
-        <button class="tab" data-filter="lenceria"     onclick="filterView('lenceria', this)">Lencería</button>
-        <button class="tab" data-filter="colgados"     onclick="filterView('colgados', this)">Colgados</button>
-        <button class="tab" data-filter="flat-lay"     onclick="filterView('flat-lay', this)">Flat Lay</button>
-        <button class="tab" data-filter="360"          onclick="filterView('360', this)">360°</button>
-        <button class="tab" data-filter="infantil"     onclick="filterView('infantil', this)">Infantil</button>
-        <button class="tab" data-filter="campanias"    onclick="filterView('campanias', this)">Campañas</button>
-        <button class="tab" data-filter="calzado"      onclick="filterView('calzado', this)">Calzado</button>
+        <button class="tab active" data-filter="all" onclick="filterView('all',this)">Todas</button>
+        <button class="tab" data-filter="moda-hombre"  onclick="filterView('moda-hombre',this)">Moda Hombre</button>
+        <button class="tab" data-filter="moda-mujer"   onclick="filterView('moda-mujer',this)">Moda Mujer</button>
+        <button class="tab" data-filter="accesorios"   onclick="filterView('accesorios',this)">Accesorios</button>
+        <button class="tab" data-filter="lenceria"     onclick="filterView('lenceria',this)">Lencería</button>
+        <button class="tab" data-filter="colgados"     onclick="filterView('colgados',this)">Colgados</button>
+        <button class="tab" data-filter="flat-lay"     onclick="filterView('flat-lay',this)">Flat Lay</button>
+        <button class="tab" data-filter="360"          onclick="filterView('360',this)">360°</button>
+        <button class="tab" data-filter="infantil"     onclick="filterView('infantil',this)">Infantil</button>
+        <button class="tab" data-filter="campanias"    onclick="filterView('campanias',this)">Campañas</button>
+        <button class="tab" data-filter="calzado"      onclick="filterView('calzado',this)">Calzado</button>
       </div>
 
       <div class="photo-grid" id="photoGrid"></div>
-
-      <div style="display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--gray3)">
-        <button class="btn btn-outline" onclick="clearAll()" style="font-size:11px">
-          Borrar todos los placeholders de muestra
-        </button>
-      </div>
     </main>
   </div>
 
@@ -531,276 +348,328 @@
   <div class="toast" id="toast"></div>
 
   <!-- Export modal -->
-  <div class="modal-bg" id="exportModal">
+  <div class="modal-bg" id="exportModalBg">
     <div class="modal">
       <h3>Descargar data.js</h3>
-      <p>Se descargará el archivo <b>data.js</b>. Reemplaza el archivo existente en la carpeta <b>js/</b> del portafolio.</p>
-      <pre id="exportPreview"></pre>
+      <p>Reemplaza el archivo <b>js/data.js</b> en tu carpeta con este archivo descargado.</p>
+      <pre id="exportPre"></pre>
       <div class="modal-actions">
         <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
-        <button class="btn btn-success" onclick="downloadFile()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Descargar
-        </button>
+        <button class="btn btn-success" onclick="downloadFile()">Descargar</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ── State ────────────────────────────────────────────
-    let entries = [];
-    let nextId  = 1;
-    let viewFilter = 'all';
+  // ── Constants ────────────────────────────────────────────
+  const CATS = {
+    'moda-hombre':'Moda Hombre','moda-mujer':'Moda Mujer','accesorios':'Accesorios',
+    'lenceria':'Lencería','colgados':'Colgados','flat-lay':'Flat Lay',
+    '360':'360°','infantil':'Infantil','campanias':'Campañas','calzado':'Calzado'
+  };
 
-    const CATS = {
-      'moda-hombre': 'Moda Hombre',
-      'moda-mujer':  'Moda Mujer',
-      'accesorios':  'Accesorios',
-      'lenceria':    'Lencería',
-      'colgados':    'Colgados',
-      'flat-lay':    'Flat Lay',
-      '360':         '360°',
-      'infantil':    'Infantil',
-      'campanias':   'Campañas',
-      'calzado':     'Calzado',
+  // ── State ────────────────────────────────────────────────
+  let entries   = [];   // { id, src, category, categoryLabel, client, title, _file?, _b64? }
+  let nextId    = 1;
+  let viewFilt  = 'all';
+  let pendingFiles = {}; // id → { b64, path } for new photos not yet on GitHub
+
+  // ── Persist ──────────────────────────────────────────────
+  function saveEntries() { localStorage.setItem('fse_entries', JSON.stringify(entries.map(e => ({...e, _file: undefined})))); }
+  function loadEntries() {
+    try {
+      const s = localStorage.getItem('fse_entries');
+      if (s) { entries = JSON.parse(s); nextId = entries.length ? Math.max(...entries.map(e=>e.id))+1 : 1; return true; }
+    } catch(e){}
+    return false;
+  }
+
+  // ── Token ────────────────────────────────────────────────
+  function saveToken() {
+    localStorage.setItem('fse_token', document.getElementById('ghToken').value.trim());
+    localStorage.setItem('fse_repo',  document.getElementById('ghRepo').value.trim());
+  }
+  function loadToken() {
+    const t = localStorage.getItem('fse_token') || '';
+    const r = localStorage.getItem('fse_repo')  || 'maxblanchardf/fotoshop-portfolio';
+    document.getElementById('ghToken').value = t;
+    document.getElementById('ghRepo').value  = r;
+    if (t) setGhStatus('idle');
+  }
+  function getToken() { return document.getElementById('ghToken').value.trim(); }
+  function getRepo()  { return document.getElementById('ghRepo').value.trim(); }
+
+  function setGhStatus(type, msg) {
+    const el = document.getElementById('ghStatus');
+    const icons = {
+      ok:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+      err:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+      idle: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
     };
+    const msgs = { ok:'Conectado a GitHub', err:'Error de conexión', idle:'Token no verificado' };
+    el.className = `gh-status ${type}`;
+    el.innerHTML = `${icons[type]} ${msg || msgs[type]}`;
+  }
 
-    // ── Load from localStorage ────────────────────────────
-    function loadSaved() {
-      try {
-        const saved = localStorage.getItem('fotoshop_entries');
-        if (saved) {
-          entries = JSON.parse(saved);
-          nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
-        } else {
-          // Load defaults from PHOTOS if available
-          if (typeof PHOTOS !== 'undefined') {
-            entries = JSON.parse(JSON.stringify(PHOTOS));
-            nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
-          }
-        }
-      } catch(e) {}
-    }
+  async function ghAPI(method, path, body) {
+    const token = getToken(), repo = getRepo();
+    const url = path.startsWith('http') ? path : `https://api.github.com/repos/${repo}/contents/${path}`;
+    const res = await fetch(url, {
+      method, headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    return res.json();
+  }
 
-    function save() {
-      localStorage.setItem('fotoshop_entries', JSON.stringify(entries));
-    }
+  async function testToken() {
+    const token = getToken();
+    if (!token) { setGhStatus('err', 'Ingresa un token primero'); return; }
+    setGhStatus('idle', 'Verificando...');
+    try {
+      const res = await fetch('https://api.github.com/user', {
+        headers: { 'Authorization': `token ${token}` }
+      });
+      const d = await res.json();
+      if (d.login) { setGhStatus('ok', `Conectado como ${d.login}`); saveToken(); }
+      else setGhStatus('err', d.message || 'Token inválido');
+    } catch(e) { setGhStatus('err', 'Error de red'); }
+  }
 
-    // ── File select ──────────────────────────────────────
-    function onFileSelect(input) {
-      const file = input.files[0];
-      if (!file) return;
+  // ── File select ──────────────────────────────────────────
+  function onFileSelect(input) {
+    const file = input.files[0]; if (!file) return;
+    const cat  = document.getElementById('catSelect').value;
+    const slug = file.name.toLowerCase().replace(/\s+/g,'-');
+    document.getElementById('srcInput').value = `photos/${cat}/${slug}`;
+    // preview
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('thumbPreview').innerHTML = `<img src="${e.target.result}">`;
+    };
+    reader.readAsDataURL(file);
+  }
 
-      // Auto-fill src
-      const cat = document.getElementById('catSelect').value;
-      const slug = file.name.toLowerCase().replace(/\s+/g, '-');
-      document.getElementById('srcInput').value = `photos/${cat}/${slug}`;
+  function onCatChange() {
+    const src = document.getElementById('srcInput').value; if (!src) return;
+    const cat  = document.getElementById('catSelect').value;
+    const file = src.split('/').pop();
+    document.getElementById('srcInput').value = `photos/${cat}/${file}`;
+  }
 
-      // Preview
+  // ── Add entry ────────────────────────────────────────────
+  function addEntry() {
+    const src    = document.getElementById('srcInput').value.trim();
+    const cat    = document.getElementById('catSelect').value;
+    const client = document.getElementById('clientInput').value.trim();
+    const title  = document.getElementById('titleInput').value.trim();
+    const fileInput = document.getElementById('fileInput');
+
+    if (!src)    { toast('⚠️ Ingresa la ruta de la foto'); return; }
+    if (!client) { toast('⚠️ Ingresa el nombre del cliente'); return; }
+
+    const id = nextId++;
+    const entry = { id, src, category: cat, categoryLabel: CATS[cat], client, title };
+    entries.push(entry);
+
+    // Store file data for GitHub upload if a file was selected
+    if (fileInput.files[0]) {
+      const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = e => {
-        const preview = document.getElementById('thumbPreview');
-        preview.innerHTML = `<img src="${e.target.result}" alt="">`;
+        const b64 = e.target.result.split(',')[1]; // strip data:image/...;base64,
+        pendingFiles[id] = { b64, path: src };
       };
       reader.readAsDataURL(file);
     }
 
-    function onCatChange() {
-      const src = document.getElementById('srcInput').value;
-      if (!src) return;
-      const cat  = document.getElementById('catSelect').value;
-      const file = src.split('/').pop();
-      document.getElementById('srcInput').value = `photos/${cat}/${file}`;
+    saveEntries();
+    document.getElementById('srcInput').value  = '';
+    document.getElementById('titleInput').value = '';
+    document.getElementById('fileInput').value  = '';
+    document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
+    renderGrid(); updateStats(); updateClientsList();
+    toast('✓ Foto agregada');
+  }
+
+  function deleteEntry(id) {
+    entries = entries.filter(e => e.id !== id);
+    delete pendingFiles[id];
+    saveEntries(); renderGrid(); updateStats();
+  }
+
+  function clearSamples() {
+    if (!confirm('¿Borrar todos los placeholders de muestra?')) return;
+    const ids = entries.filter(e => e.src.startsWith('assets/ph/')).map(e => e.id);
+    entries = entries.filter(e => !e.src.startsWith('assets/ph/'));
+    ids.forEach(id => delete pendingFiles[id]);
+    saveEntries(); renderGrid(); updateStats(); toast('Placeholders borrados');
+  }
+
+  // ── Filter ───────────────────────────────────────────────
+  function filterView(cat, btn) {
+    viewFilt = cat;
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t===btn));
+    renderGrid();
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function renderGrid() {
+    const grid = document.getElementById('photoGrid');
+    const list = viewFilt === 'all' ? entries : entries.filter(e => e.category === viewFilt);
+    document.getElementById('totalCount').textContent = `${entries.length} fotos`;
+
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty"><p>No hay fotos en esta categoría.</p></div>`;
+      return;
     }
 
-    // ── Add entry ────────────────────────────────────────
-    function addEntry() {
-      const src    = document.getElementById('srcInput').value.trim();
-      const cat    = document.getElementById('catSelect').value;
-      const client = document.getElementById('clientInput').value.trim();
-      const title  = document.getElementById('titleInput').value.trim();
+    // Use object URL for pending files to show preview
+    const previewSrcs = {};
+    // Build previews from pendingFiles b64 data that's already stored
+    Object.keys(pendingFiles).forEach(id => {
+      const pf = pendingFiles[id];
+      if (pf.b64) previewSrcs[id] = `data:image/jpeg;base64,${pf.b64}`;
+    });
 
-      if (!src)    { showToast('⚠️ Ingresa la ruta de la foto'); return; }
-      if (!client) { showToast('⚠️ Ingresa el nombre del cliente'); return; }
+    grid.innerHTML = list.map(e => {
+      const isNew = !!pendingFiles[e.id];
+      const imgSrc = previewSrcs[e.id] || e.src;
+      return `<div class="card">
+        ${isNew ? '<span class="card-new">NUEVO</span>' : ''}
+        <img src="${imgSrc}" alt="" onerror="this.parentElement.querySelector('.card-overlay') && (this.style.display='none')">
+        <div class="card-overlay">
+          <span class="card-client">${e.client}</span>
+          <span class="card-cat">${e.categoryLabel}</span>
+        </div>
+        <button class="card-del" onclick="deleteEntry(${e.id})" title="Eliminar">✕</button>
+      </div>`;
+    }).join('');
+  }
 
-      const entry = {
-        id: nextId++,
-        src,
-        category: cat,
-        categoryLabel: CATS[cat],
-        client,
-        title,
-      };
+  function updateStats() {
+    const counts = {};
+    entries.forEach(e => { counts[e.category] = (counts[e.category]||0)+1; });
+    document.getElementById('statsArea').innerHTML =
+      Object.entries(CATS).map(([s,l]) => `<span class="chip">${l} <b>${counts[s]||0}</b></span>`).join('');
+  }
 
-      entries.push(entry);
-      save();
+  function updateClientsList() {
+    const clients = [...new Set(entries.map(e=>e.client))].sort();
+    document.getElementById('clientsList').innerHTML = clients.map(c=>`<option value="${c}">`).join('');
+  }
 
-      // Clear form (keep category and client for quick bulk add)
-      document.getElementById('srcInput').value  = '';
-      document.getElementById('titleInput').value = '';
-      document.getElementById('fileInput').value  = '';
-      document.getElementById('thumbPreview').innerHTML = '<span>Vista previa</span>';
+  // ── Publish to GitHub ────────────────────────────────────
+  async function publishToGitHub() {
+    const token = getToken();
+    if (!token) { toast('Configura el token de GitHub primero', 'error'); return; }
 
-      renderGrid();
-      updateStats();
-      updateClientsList();
-      showToast('✓ Foto agregada');
-    }
+    const newFiles = Object.values(pendingFiles);
+    const totalSteps = newFiles.length + 1; // photos + data.js
+    let step = 0;
 
-    // ── Delete entry ─────────────────────────────────────
-    function deleteEntry(id) {
-      entries = entries.filter(e => e.id !== id);
-      save();
-      renderGrid();
-      updateStats();
-    }
+    const btn = document.getElementById('publishBtn');
+    btn.disabled = true;
+    btn.textContent = 'Publicando...';
 
-    // ── Clear sample data ─────────────────────────────────
-    function clearAll() {
-      if (!confirm('¿Borrar todos los placeholders de muestra? Esto no se puede deshacer.')) return;
-      entries = entries.filter(e => !e.src.startsWith('assets/ph/'));
-      save();
-      renderGrid();
-      updateStats();
-      showToast('Placeholders borrados');
-    }
+    const wrap  = document.getElementById('progressWrap');
+    const fill  = document.getElementById('progressFill');
+    const label = document.getElementById('progressLabel');
+    wrap.classList.add('show');
 
-    // ── Filter ───────────────────────────────────────────
-    function filterView(cat, btn) {
-      viewFilter = cat;
-      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
-      renderGrid();
-    }
+    const setProgress = (s, msg) => {
+      fill.style.width  = `${Math.round((s/totalSteps)*100)}%`;
+      label.textContent = msg;
+    };
 
-    // ── Render grid ──────────────────────────────────────
-    function renderGrid() {
-      const grid = document.getElementById('photoGrid');
-      const filtered = viewFilter === 'all' ? entries : entries.filter(e => e.category === viewFilter);
-
-      document.getElementById('totalCount').textContent =
-        entries.length === 1 ? '1 foto' : `${entries.length} fotos`;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#CCC" stroke-width="1.5">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <path d="M3 9l4-4 4 4 4-4 4 4"/>
-          </svg>
-          <p>No hay fotos en esta categoría</p>
-        </div>`;
-        return;
+    try {
+      // Upload photo files
+      for (const pf of newFiles) {
+        step++;
+        setProgress(step, `Subiendo foto ${step}/${newFiles.length}...`);
+        // Get SHA if exists
+        const existing = await ghAPI('GET', pf.path);
+        const sha = existing.sha;
+        const body = { message: `Add ${pf.path}`, content: pf.b64 };
+        if (sha) body.sha = sha;
+        const res = await ghAPI('PUT', pf.path, body);
+        if (!res.content) throw new Error(`Error subiendo ${pf.path}: ${res.message}`);
       }
 
-      grid.innerHTML = filtered.map(e => `
-        <div class="entry-card">
-          ${e.src.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ?
-            `<img src="${e.src}" alt="${e.client}" onerror="this.parentElement.innerHTML='<div class=\\'entry-no-img\\'><svg width=\\'24\\' height=\\'24\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg><span>${e.src}</span></div>'">`
-            : `<div class="entry-no-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span>${e.src}</span></div>`
-          }
-          <div class="entry-overlay">
-            <span class="entry-client">${e.client}</span>
-            <span class="entry-cat">${e.categoryLabel}</span>
-          </div>
-          <button class="entry-delete" onclick="deleteEntry(${e.id})" title="Eliminar">✕</button>
-        </div>
-      `).join('');
+      // Upload data.js
+      step++;
+      setProgress(step, 'Actualizando data.js...');
+      const dataContent = generateDataJs();
+      const b64DataJs   = btoa(unescape(encodeURIComponent(dataContent)));
+      const existingDataJs = await ghAPI('GET', 'js/data.js');
+      const dataBody = { message: 'Update data.js', content: b64DataJs };
+      if (existingDataJs.sha) dataBody.sha = existingDataJs.sha;
+      const dataRes = await ghAPI('PUT', 'js/data.js', dataBody);
+      if (!dataRes.content) throw new Error(`Error actualizando data.js: ${dataRes.message}`);
+
+      // Clear pending
+      pendingFiles = {};
+      saveEntries();
+      renderGrid();
+
+      setProgress(totalSteps, '¡Publicado con éxito!');
+      toast('✓ Sitio actualizado en GitHub', 'success');
+      setTimeout(() => { wrap.classList.remove('show'); fill.style.width='0%'; }, 3000);
+
+    } catch(err) {
+      setProgress(0, `Error: ${err.message}`);
+      toast(`Error: ${err.message}`, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Publicar en GitHub';
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Publicar en GitHub';
     }
+  }
 
-    // ── Stats chips ──────────────────────────────────────
-    function updateStats() {
-      const counts = {};
-      entries.forEach(e => { counts[e.category] = (counts[e.category] || 0) + 1; });
-      const area = document.getElementById('statsArea');
-      area.innerHTML = `<p style="font-size:11px;color:var(--gray2);width:100%;margin-bottom:4px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">Resumen</p>` +
-        Object.entries(CATS).map(([slug, label]) =>
-          `<span class="chip">${label} <b>${counts[slug] || 0}</b></span>`
-        ).join('');
-    }
+  // ── Export ───────────────────────────────────────────────
+  function generateDataJs() {
+    const lines = entries.map(e =>
+      `  { id: ${e.id}, src: '${e.src}', category: '${e.category}', categoryLabel: '${e.categoryLabel}', client: '${e.client}', title: '${e.title || ''}' },`
+    ).join('\n');
+    return `/* Foto Shop Estudio — data.js\n   Generado desde el panel de administración */\n\nconst PHOTOS = [\n${lines}\n];\n`;
+  }
 
-    // ── Clients datalist ─────────────────────────────────
-    function updateClientsList() {
-      const clients = [...new Set(entries.map(e => e.client))].sort();
-      const dl = document.getElementById('clientsList');
-      dl.innerHTML = clients.map(c => `<option value="${c}">`).join('');
-    }
+  function exportModal() {
+    document.getElementById('exportPre').textContent = generateDataJs().slice(0, 3000);
+    document.getElementById('exportModalBg').classList.add('open');
+  }
+  function downloadFile() {
+    const blob = new Blob([generateDataJs()], {type:'text/javascript'});
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'data.js' });
+    a.click(); URL.revokeObjectURL(a.href);
+    closeModal(); toast('✓ data.js descargado');
+  }
+  function closeModal() { document.getElementById('exportModalBg').classList.remove('open'); }
 
-    // ── Export ───────────────────────────────────────────
-    function generateDataJs() {
-      const lines = entries.map(e =>
-        `  { id: ${e.id}, src: '${e.src}', category: '${e.category}', categoryLabel: '${e.categoryLabel}', client: '${e.client}', title: '${e.title}' },`
-      ).join('\n');
+  // ── Toast ────────────────────────────────────────────────
+  let toastTimer;
+  function toast(msg, type='') {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.className = `toast ${type} show`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  }
 
-      return `/* =====================================================
-   FOTO SHOP ESTUDIO — data.js
-   Generado desde el panel de administración
-   =====================================================
-   CÓMO AGREGAR FOTOS
-   ─────────────────────────────────────────────────────
-   Usa el panel admin.html para agregar fotos visualmente.
-   ===================================================== */
-
-const PHOTOS = [
-${lines}
-];
-`;
-    }
-
-    function exportData() {
-      const content = generateDataJs();
-      document.getElementById('exportPreview').textContent = content.slice(0, 2000) + (content.length > 2000 ? '\n...' : '');
-      document.getElementById('exportModal').classList.add('open');
-    }
-
-    function downloadFile() {
-      const content = generateDataJs();
-      const blob = new Blob([content], { type: 'text/javascript' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href = url;
-      a.download = 'data.js';
-      a.click();
-      URL.revokeObjectURL(url);
-      closeModal();
-      showToast('✓ data.js descargado — reemplaza el archivo en js/');
-    }
-
-    function closeModal() {
-      document.getElementById('exportModal').classList.remove('open');
-    }
-
-    function previewSite() {
-      window.open('index.html', '_blank');
-    }
-
-    // ── Toast ────────────────────────────────────────────
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
-    }
-
-    // ── Auto-fill src on category change ─────────────────
-    document.getElementById('catSelect').addEventListener('change', onCatChange);
-
-    // ── Init ─────────────────────────────────────────────
-    loadSaved();
-    renderGrid();
-    updateStats();
-    updateClientsList();
+  // ── Init ─────────────────────────────────────────────────
+  loadToken();
+  if (!loadEntries() && typeof PHOTOS !== 'undefined') {
+    entries = JSON.parse(JSON.stringify(PHOTOS));
+    nextId  = entries.length ? Math.max(...entries.map(e=>e.id))+1 : 1;
+    saveEntries();
+  }
+  renderGrid(); updateStats(); updateClientsList();
   </script>
 
-  <!-- Load existing data for import -->
   <script src="js/data.js"></script>
   <script>
-    // If localStorage is empty, import from PHOTOS
-    if (!localStorage.getItem('fotoshop_entries') && typeof PHOTOS !== 'undefined') {
+    if (!localStorage.getItem('fse_entries') && typeof PHOTOS !== 'undefined') {
       entries = JSON.parse(JSON.stringify(PHOTOS));
-      nextId  = entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
-      save();
-      renderGrid();
-      updateStats();
-      updateClientsList();
+      nextId  = entries.length ? Math.max(...entries.map(e=>e.id))+1 : 1;
+      saveEntries(); renderGrid(); updateStats(); updateClientsList();
     }
   </script>
 </body>
