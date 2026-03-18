@@ -152,4 +152,7 @@ const PHOTOS = [
   { id: 235, src: 'photos/lenceria/25489-2-1.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
   { id: 236, src: 'photos/lenceria/25502-235-1.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
   { id: 237, src: 'photos/lenceria/90011-173-2.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
+  { id: 238, src: 'photos/accesorios/3617520200017-2.jpg', category: 'accesorios', categoryLabel: 'Accesorios', client: 'Humana', title: '' },
+  { id: 239, src: 'photos/accesorios/3617520200031-1.jpg', category: 'accesorios', categoryLabel: 'Accesorios', client: 'Humana', title: '' },
+  { id: 240, src: 'photos/accesorios/3617527900019-2.jpg', category: 'accesorios', categoryLabel: 'Accesorios', client: 'Humana', title: '' },
 ];
