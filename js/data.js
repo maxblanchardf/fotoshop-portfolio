@@ -175,4 +175,5 @@ const PHOTOS = [
   { id: 258, src: 'photos/moda-mujer/pantalon-lino-black-6.jpg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Raindoor', title: '' },
   { id: 259, src: 'photos/moda-mujer/pantes-flare-bolsillo-ecru-5.jpg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Raindoor', title: '' },
   { id: 260, src: 'photos/moda-mujer/pants-bag-blue-1.jpg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Raindoor', title: '' },
+  { id: 261, src: 'photos/lenceria/25483-23-3.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
 ];
