@@ -149,4 +149,7 @@ const PHOTOS = [
   { id: 232, src: 'photos/flat-lay/196780806915-2.jpg', category: 'flat-lay', categoryLabel: 'Flat Lay', client: 'Brooke Brothers', title: '' },
   { id: 233, src: 'photos/flat-lay/196780851076-1.jpg', category: 'flat-lay', categoryLabel: 'Flat Lay', client: 'Brooke Brothers', title: '' },
   { id: 234, src: 'photos/flat-lay/196780851076-2.jpg', category: 'flat-lay', categoryLabel: 'Flat Lay', client: 'Brooke Brothers', title: '' },
+  { id: 235, src: 'photos/lenceria/25489-2-1.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
+  { id: 236, src: 'photos/lenceria/25502-235-1.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
+  { id: 237, src: 'photos/lenceria/90011-173-2.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
 ];
