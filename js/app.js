@@ -25,6 +25,8 @@
   var clientSel    = document.getElementById('clientSelect');
   var catBtns      = document.querySelectorAll('.cat');
   var clientsGrid  = document.getElementById('clientsGrid');
+  var clientTitle  = document.getElementById('clientTitle');
+  var clientTitleName = document.getElementById('clientTitleName');
 
   var lb           = document.getElementById('lb');
   var lbImg        = document.getElementById('lbImg');
@@ -48,10 +50,21 @@
     return n === 1 ? '1 foto' : n + ' fotos';
   }
 
+  // ── Client title ─────────────────────────────────────
+  function updateClientTitle() {
+    if (activeClient !== 'all') {
+      clientTitleName.textContent = activeClient;
+      clientTitle.style.display = 'block';
+    } else {
+      clientTitle.style.display = 'none';
+    }
+  }
+
   // ── Render Gallery ───────────────────────────────────
   function render() {
     filtered = getFiltered();
     gallery.innerHTML = '';
+    updateClientTitle();
 
     if (filtered.length === 0) {
       gallery.innerHTML =
