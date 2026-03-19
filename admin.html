@@ -272,6 +272,14 @@
       </div>
       <button class="btn btn-outline" style="width:100%;margin-bottom:4px" onclick="testToken()">Verificar conexión</button>
 
+      <!-- Featured client title -->
+      <p class="section-label">Título del portafolio</p>
+      <div class="form-group">
+        <label>Preparado para:</label>
+        <input type="text" id="featuredClient" placeholder="Nombre del cliente" oninput="saveFeaturedClient()">
+        <p class="hint">Aparece como título grande en el portafolio. Dejá vacío para ocultarlo.</p>
+      </div>
+
       <!-- Progress bar -->
       <div class="progress-wrap" id="progressWrap">
         <p class="progress-label" id="progressLabel">Subiendo...</p>
@@ -397,6 +405,13 @@
     document.getElementById('ghToken').value = t;
     document.getElementById('ghRepo').value  = r;
     if (t) setGhStatus('idle');
+  }
+  function saveFeaturedClient() {
+    localStorage.setItem('fse_featured', document.getElementById('featuredClient').value.trim());
+  }
+  function loadFeaturedClient() {
+    const v = localStorage.getItem('fse_featured') || '';
+    document.getElementById('featuredClient').value = v;
   }
   function getToken() { return document.getElementById('ghToken').value.trim(); }
   function getRepo()  { return document.getElementById('ghRepo').value.trim(); }
@@ -701,10 +716,11 @@
 
   // ── Export ───────────────────────────────────────────────
   function generateDataJs() {
+    const featured = document.getElementById('featuredClient').value.trim();
     const lines = entries.map(e =>
       `  { id: ${e.id}, src: '${e.src}', category: '${e.category}', categoryLabel: '${e.categoryLabel}', client: '${e.client}', title: '${e.title || ''}' },`
     ).join('\n');
-    return `/* Foto Shop Estudio — data.js\n   Generado desde el panel de administración */\n\nconst PHOTOS = [\n${lines}\n];\n`;
+    return `/* Foto Shop Estudio — data.js\n   Generado desde el panel de administración */\n\nconst FEATURED_CLIENT = '${featured}';\n\nconst PHOTOS = [\n${lines}\n];\n`;
   }
 
   function exportModal() {
@@ -730,6 +746,7 @@
 
   // ── Init ─────────────────────────────────────────────────
   loadToken();
+  loadFeaturedClient();
   if (!loadEntries() && typeof PHOTOS !== 'undefined') {
     entries = JSON.parse(JSON.stringify(PHOTOS));
     nextId  = entries.length ? Math.max(...entries.map(e=>e.id))+1 : 1;
