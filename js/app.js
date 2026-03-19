@@ -50,21 +50,10 @@
     return n === 1 ? '1 foto' : n + ' fotos';
   }
 
-  // ── Client title ─────────────────────────────────────
-  function updateClientTitle() {
-    if (activeClient !== 'all') {
-      clientTitleName.textContent = activeClient;
-      clientTitle.style.display = 'block';
-    } else {
-      clientTitle.style.display = 'none';
-    }
-  }
-
   // ── Render Gallery ───────────────────────────────────
   function render() {
     filtered = getFiltered();
     gallery.innerHTML = '';
-    updateClientTitle();
 
     if (filtered.length === 0) {
       gallery.innerHTML =
@@ -216,6 +205,11 @@
 
   // ── Init (called after data.js loads) ────────────────
   function init() {
+    // Show fixed title from admin config
+    if (typeof FEATURED_CLIENT !== 'undefined' && FEATURED_CLIENT) {
+      clientTitleName.textContent = FEATURED_CLIENT;
+      clientTitle.style.display = 'block';
+    }
     populateClients();
     render();
     renderClientsSection();
