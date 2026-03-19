@@ -176,4 +176,9 @@ const PHOTOS = [
   { id: 259, src: 'photos/moda-mujer/pantes-flare-bolsillo-ecru-5.jpg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Raindoor', title: '' },
   { id: 260, src: 'photos/moda-mujer/pants-bag-blue-1.jpg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Raindoor', title: '' },
   { id: 261, src: 'photos/lenceria/25483-23-3.jpg', category: 'lenceria', categoryLabel: 'Lencería', client: 'Flores', title: '' },
+  { id: 262, src: 'photos/moda-hombre/whatsapp-image-2026-03-19-at-17.03.03-9-.jpeg', category: 'moda-hombre', categoryLabel: 'Moda Hombre', client: 'Wrangler', title: '' },
+  { id: 263, src: 'photos/moda-hombre/whatsapp-image-2026-03-19-at-17.03.03-7-.jpeg', category: 'moda-hombre', categoryLabel: 'Moda Hombre', client: 'Wrangler', title: '' },
+  { id: 264, src: 'photos/moda-hombre/whatsapp-image-2026-03-19-at-17.03.02-1-.jpeg', category: 'moda-hombre', categoryLabel: 'Moda Hombre', client: 'Wrangler', title: '' },
+  { id: 265, src: 'photos/moda-mujer/whatsapp-image-2026-03-19-at-17.03.03-1-.jpeg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Wrangler', title: '' },
+  { id: 266, src: 'photos/moda-mujer/whatsapp-image-2026-03-19-at-17.03.02-4-.jpeg', category: 'moda-mujer', categoryLabel: 'Moda Mujer', client: 'Wrangler', title: '' },
 ];
