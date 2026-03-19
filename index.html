@@ -8,6 +8,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    .client-title {
+      padding: 48px 32px 0;
+      display: none;
+    }
+    .client-title__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #29ABE2; margin-bottom: 6px;
+    }
+    .client-title__name {
+      font-size: 32px; font-weight: 300; color: #111; letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    @media (max-width: 600px) {
+      .client-title { padding: 32px 16px 0; }
+      .client-title__name { font-size: 24px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -33,7 +51,6 @@
       <button class="cat" data-cat="lenceria">Lencería</button>
       <button class="cat" data-cat="colgados">Colgados</button>
       <button class="cat" data-cat="flat-lay">Flat Lay</button>
-      <button class="cat" data-cat="360">360°</button>
       <button class="cat" data-cat="infantil">Infantil</button>
       <button class="cat" data-cat="campanias">Campañas</button>
       <button class="cat" data-cat="calzado">Calzado</button>
@@ -43,6 +60,12 @@
         <option value="all">Todos los clientes</option>
       </select>
     </div>
+  </div>
+
+  <!-- ── CLIENT TITLE ── -->
+  <div class="client-title" id="clientTitle">
+    <p class="client-title__label">Preparado para:</p>
+    <h1 class="client-title__name" id="clientTitleName"></h1>
   </div>
 
   <!-- ── COUNT BAR ── -->
