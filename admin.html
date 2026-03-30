@@ -181,6 +181,14 @@
       align-items: center; justify-content: center;
     }
     .card:hover .card-del { display: flex; }
+    .card-edit {
+      position: absolute; top: 6px; right: 34px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(41,171,226,0.9); border: none; color: white;
+      cursor: pointer; display: none;
+      align-items: center; justify-content: center;
+    }
+    .card:hover .card-edit { display: flex; }
     .card-no-img {
       width: 100%; height: 100%; display: flex; flex-direction: column;
       align-items: center; justify-content: center; background: var(--bg);
@@ -355,6 +363,40 @@
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
+
+  <!-- Edit modal -->
+  <div class="modal-bg" id="editModalBg">
+    <div class="modal">
+      <h3>Editar foto</h3>
+      <input type="hidden" id="editId">
+      <div class="form-group">
+        <label>Categoría</label>
+        <select id="editCat">
+          <option value="moda-hombre">Moda Hombre</option>
+          <option value="moda-mujer">Moda Mujer</option>
+          <option value="accesorios">Accesorios</option>
+          <option value="lenceria">Lencería</option>
+          <option value="colgados">Colgados</option>
+          <option value="flat-lay">Flat Lay</option>
+          <option value="infantil">Infantil</option>
+          <option value="campanias">Campañas</option>
+          <option value="calzado">Calzado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Cliente</label>
+        <input type="text" id="editClient" list="clientsList" placeholder="Nombre del cliente">
+      </div>
+      <div class="form-group">
+        <label>Título <span style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <input type="text" id="editTitle" placeholder="Descripción breve">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeEditModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEdit()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Export modal -->
   <div class="modal-bg" id="exportModalBg">
@@ -580,6 +622,39 @@
     toast(`✓ ${added} foto${added > 1 ? 's agregadas' : ' agregada'} (comprimidas)`);
   }
 
+  // ── Edit entry ───────────────────────────────────────────
+  function editEntry(id) {
+    const e = entries.find(en => en.id === id);
+    if (!e) return;
+    document.getElementById('editId').value    = id;
+    document.getElementById('editCat').value   = e.category;
+    document.getElementById('editClient').value = e.client;
+    document.getElementById('editTitle').value  = e.title || '';
+    document.getElementById('editModalBg').classList.add('open');
+  }
+
+  function saveEdit() {
+    const id     = parseInt(document.getElementById('editId').value);
+    const cat    = document.getElementById('editCat').value;
+    const client = document.getElementById('editClient').value.trim();
+    const title  = document.getElementById('editTitle').value.trim();
+    if (!client) { toast('⚠️ Ingresa el nombre del cliente'); return; }
+    const e = entries.find(en => en.id === id);
+    if (!e) return;
+    e.category      = cat;
+    e.categoryLabel = CATS[cat];
+    e.client        = client;
+    e.title         = title;
+    saveEntries();
+    renderGrid(); updateStats(); updateClientsList();
+    closeEditModal();
+    toast('✓ Foto actualizada — publicá para que se vea en el sitio');
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModalBg').classList.remove('open');
+  }
+
   function deleteEntry(id) {
     entries = entries.filter(e => e.id !== id);
     delete pendingFiles[id];
@@ -630,6 +705,9 @@
           <span class="card-client">${e.client}</span>
           <span class="card-cat">${e.categoryLabel}</span>
         </div>
+        <button class="card-edit" onclick="editEntry(${e.id})" title="Editar">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
         <button class="card-del" onclick="deleteEntry(${e.id})" title="Eliminar">✕</button>
       </div>`;
     }).join('');
